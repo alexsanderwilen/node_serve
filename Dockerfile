@@ -1,20 +1,17 @@
-# Usa uma imagem do docker hub com a versão carbon do Node.js
-FROM node:carbon
+FROM node:18
 
-# Define qual diretório será usado para nossa aplicação dentro do container
-WORKDIR /usr/src/app
+RUN mkdir -p /home/node/app/node_modules && chown -R node:node /home/node/app
 
-# Copia todos os arquivos que começam com package e tem extensão .json para o diretório definido acima
+WORKDIR /home/node/app
+
 COPY package*.json ./
 
-# Instala todas as dependências declaradas no package.json
+USER node
+
 RUN npm install
 
-# Copia todos os arquivos da raiz da nossa aplicação para a pasta deinida no WORKDIR
 COPY . .
 
-# Expõe a porta 3000 do container
-EXPOSE 3000
+EXPOSE 8888
 
-# Roda o comando 'npm start'
-CMD [ "npm", "start" ]
+CMD [ "node", "src/server.js" ]
