@@ -1,24 +1,19 @@
-FROM node:18
+# Usa uma imagem do docker hub com a versão carbon do Node.js
+FROM node:18.04
 
-# Copia o arquivo package.json e package-lock.json para o diretório atual
+# Define qual diretório será usado para nossa aplicação dentro do container
+WORKDIR /usr/src/
+
+# Copia todos os arquivos que começam com package e tem extensão .json para o diretório definido acima
 COPY package*.json ./
 
-# Instala o Node.js via apt-get
-RUN apt-get update -yq && apt-get install -y curl gnupg
-RUN curl -sL https://deb.nodesource.com/setup_18.x | bash
-RUN apt-get install -yq nodejs
-
-
-# Define o usuário como "node"
-USER node
-
-# Instala as dependências do projeto
+# Instala todas as dependências declaradas no package.json
 RUN npm install
 
-# Copia todos os arquivos do diretório atual para o container
+# Copia todos os arquivos da raiz da nossa aplicação para a pasta deinida no WORKDIR
 COPY . .
 
-# Expõe a porta 8888
+# Expõe a porta 3000 do container
 EXPOSE 8888
 
 # Comando para iniciar o servidor Node.js
