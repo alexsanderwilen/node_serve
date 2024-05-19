@@ -3,6 +3,12 @@ FROM node:18
 # Copia o arquivo package.json e package-lock.json para o diretório atual
 COPY package*.json ./
 
+# Instala o Node.js via apt-get
+RUN apt-get update -yq && apt-get install -y curl gnupg
+RUN curl -sL https://deb.nodesource.com/setup_18.x | bash
+RUN apt-get install -yq nodejs
+
+
 # Define o usuário como "node"
 USER node
 
